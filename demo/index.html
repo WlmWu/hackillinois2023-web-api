@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Your Cart</title>
+    <script src="https://cdn.static.runoob.com/libs/jquery/1.8.3/jquery.js"></script>
+</head>
+<style>
+    body {
+        font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        background-color: rgb(236, 243, 217);
+    }
+    
+    table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgb(163, 215, 213);
+        border: 1px solid rgb(138, 168, 237);
+        padding: 1em 1em 1em 1em;
+    }
+    
+    thead th:nth-child(1) {
+        width: 20%;
+    }
+    
+    thead th:nth-child(2) {
+        width: 20%;
+    }
+    
+    thead th:nth-child(3) {
+        width: 20%;
+    }
+    
+    thead th:nth-child(4) {
+        width: 20%;
+    }
+    
+    th,
+    td {
+        padding: 20px;
+    }
+    
+    .parent {
+        display: flex;
+        /* 水平置中 */
+        justify-content: center;
+        /* 垂直置中 */
+        align-items: center;
+    }
+    
+    #footer {
+        background-color: rgb(163, 215, 193);
+        border: 1px solid rgb(138, 168, 237);
+        padding: 1em 1em 1em 1em;
+    }
+    
+    .button-23 {
+        background-color: #FFFFFF;
+        border: 1px solid #222222;
+        border-radius: 8px;
+        box-sizing: border-box;
+        color: #222222;
+        cursor: pointer;
+        display: inline-block;
+        font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+        margin: 0;
+        outline: none;
+        padding: 13px 23px;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        touch-action: manipulation;
+        transition: box-shadow .2s, -ms-transform .1s, -webkit-transform .1s, transform .1s;
+        user-select: none;
+        -webkit-user-select: none;
+        width: auto;
+    }
+    
+    .button-23:focus-visible {
+        box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+        transition: box-shadow .2s;
+    }
+    
+    .button-23:active {
+        background-color: #F7F7F7;
+        border-color: #000000;
+        transform: scale(.96);
+    }
+    
+    .button-23:disabled {
+        border-color: #DDDDDD;
+        color: #DDDDDD;
+        cursor: not-allowed;
+        opacity: 1;
+    }
+    
+    .container-fluid {
+        display: flex;
+        justify-content: center;
+        background-color: #3fc5e7;
+        padding: 1em 1em 1em 1em;
+        align-items: center;
+        border-radius: 8px;
+    }
+    
+    .navbar-inverse {
+        border-radius: 8px;
+        background-color: #3fc5e7;
+        padding: 1em 1em 1em 1em;
+        text-align: right;
+    }
+    
+    .navbar-brand {
+        color: black;
+        font-size: x-large;
+        text-decoration: none;
+        font-style: oblique;
+    }
+</style>
+
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand " href="#">Ama2on</a>
+            </div>
+        </div>
+        <div>Hello <span id="name">Alice</span>!</div>
+        <div hidden id="id">0001</div>
+    </nav>
+    <div class="  col-xs-12">
+        <table class="table" style=" margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Picture</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td><img src="Picture/1.jpg" width="50" alt="Hamburger"></td>
+                    <td>Hamburger</td>
+                    <td>10 </td>
+                    <td>1 </td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td><img src="Picture/2.jpg" width="50" alt="coffee"></td>
+                    <td>coffee</td>
+                    <td>5 </td>
+                    <td>2 </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div id="footer">
+        <div class="parent">
+            <div>
+                <p id="total" class="inner">Total: 20</p>
+            </div>
+        </div>
+        <div class="parent">
+            <div class="modal-footer">
+                <button type="button" class="button-23" data-dismiss="modal" id="chkoutBtn">Checkout</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function makeRequest() {
+            url = "http://10.192.183.197:8000/acceptance";
+            // url = "https://hackillinois2023-api.fly.dev/acceptance";
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+
+            let payload = JSON.stringify({
+                id: document.getElementById('id').innerText,
+                name: document.getElementById('name').innerText,
+                status: 'checking'
+            })
+
+            xhr.send(payload);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status);
+                    // console.log(xhr.responseText);
+                    data = JSON.parse(JSON.parse(xhr.responseText));
+                    start();
+                }
+            };
+        }
+
+        function checkoutSuccess(data) {
+            console.log(data);
+            if (data.status == 'pending') {
+                console.log('pending...');
+                return false;
+            }
+            if (data.id == document.getElementById('id').innerText) {
+                if (data.accepted == 'True') {
+                    alert('Checkout Complete!');
+                } else {
+                    alert('Checkout rejected, Please try again');
+                }
+                return true;
+            } else {
+                alert('Some Error Occurs, Please try it later');
+            }
+            return false
+        }
+    </script>
+    <script defer>
+        function start() {
+            const delay = 1000 /*ms*/ ;
+            const totalWaiting = 10 /*sec*/ ;
+            let timer = null;
+            let errorTimer = 0;
+            payload = JSON.stringify({
+                id: document.getElementById('id').innerText,
+                name: document.getElementById('name').innerText,
+                status: 'checking'
+            })
+            console.log(payload);
+
+            async function waitingAccept() {
+                let response = await fetch('http://10.192.183.197:8000/acceptance', {
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    method: 'POST',
+                    body: payload
+                });
+                // let response = await fetch('http://127.0.0.1:5000');
+                rjson = await response.json();
+
+                timer = setTimeout(waitingAccept, delay);
+                console.log(errorTimer);
+                document.getElementById('chkoutBtn').innerText = 'Pending' + '.'.repeat(errorTimer % 4);
+                if (++errorTimer > totalWaiting || checkoutSuccess(JSON.parse(rjson))) {
+                    document.getElementById('chkoutBtn').innerText = 'Checkout';
+                    clearInterval(timer);
+                }
+            }
+            waitingAccept();
+        }
+    </script>
+    <script>
+        chkoutBtn.addEventListener('click', start);
+    </script>
+</body>
+
+</html>

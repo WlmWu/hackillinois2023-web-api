@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My App</title>
+</head>
+
+<body>
+    <div>Name: <span id="name">Alice</span>!</div>
+    <div hidden id="id">0001</div>
+    <button id="acc">Accpet</button>
+    <button id="rej">Reject</button>
+</body>
+<script>
+    function reply(accept) {
+        if (accept) {
+            approve(true);
+            console.log('Accept');
+            alert('Accepted');
+        } else {
+            approve(false);
+            console.log('Reject');
+            alert('Rejected');
+        }
+    }
+    acc.addEventListener("click", () => {
+        reply(true);
+    });
+    rej.addEventListener("click", () => {
+        reply(false);
+    });
+</script>
+<script>
+    function approve(approved) {
+        url = "http://10.192.183.197:8000/acceptance";
+        // url = "https://hackillinois2023-api.fly.dev/acceptance";
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+
+        let payload = JSON.stringify({
+            id: document.getElementById('id').innerText,
+            name: document.getElementById('name').innerText,
+            status: 'checked',
+            accepted: (approved ? 'True' : 'False')
+        })
+
+        xhr.send(payload);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                console.log(xhr.status);
+                console.log(xhr.responseText);
+                // data = JSON.parse(JSON.parse(xhr.responseText));
+            }
+        };
+    }
+</script>
+
+</html>
